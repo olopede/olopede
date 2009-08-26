@@ -34,7 +34,7 @@ Prefix=%(projdir)s/modularduino_uber/modularduino_uber
 *BottomSoldermask=%(prefix)s.sts
 Drills=%(prefix)s.drd
 BoardOutline=%(prefix)s.bor
-Repeat=3
+Repeat=2
 
 [Turing]
 Prefix=%(projdir)s/turing_base/turing_base
@@ -59,4 +59,4 @@ Prefix=%(projdir)s/lightbar/lightbar
 Drills=%(prefix)s.drd
 BoardOutline=%(prefix)s.bor
 
-Repeat=10
+Repeat=30
