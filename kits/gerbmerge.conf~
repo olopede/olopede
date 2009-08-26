@@ -1,0 +1,62 @@
+[DEFAULT]
+projdir = /home/zach/muffinc/kits
+MergeOut = merge
+[Options]
+LeftMargin   = 0.1
+RightMargin  = 0.1
+TopMargin    = 0.1
+BottomMargin = 0.1
+XSpacing = 0.05
+YSpacing = 0.05
+CutLineWidth = 0.01
+
+[MergeOutputFiles]
+Prefix = %(mergeout)s
+
+*TopLayer=%(prefix)s.cmp
+*BottomLayer=%(prefix)s.sol
+*TopSilkscreen=%(prefix)s.plc
+*BottomSilkscreen=%(prefix)s.pls
+*TopSoldermask=%(prefix)s.stc
+*BottomSoldermask=%(prefix)s.sts
+Drills=%(prefix)s.drd
+BoardOutline=%(prefix)s.bor
+#ToolList = toollist.%(prefix)s.drl
+#Placement = placement.%(prefix)s.txt
+
+[Mod]
+Prefix=%(projdir)s/modularduino_uber/modularduino_uber
+*TopLayer=%(prefix)s.cmp
+*BottomLayer=%(prefix)s.sol
+*TopSilkscreen=%(prefix)s.plc
+*BottomSilkscreen=%(prefix)s.pls
+*TopSoldermask=%(prefix)s.stc
+*BottomSoldermask=%(prefix)s.sts
+Drills=%(prefix)s.drd
+BoardOutline=%(prefix)s.bor
+Repeat=3
+
+[Turing]
+Prefix=%(projdir)s/turing_base/turing_base
+*TopLayer=%(prefix)s.cmp
+*BottomLayer=%(prefix)s.sol
+*TopSilkscreen=%(prefix)s.plc
+*BottomSilkscreen=%(prefix)s.pls
+*TopSoldermask=%(prefix)s.stc
+*BottomSoldermask=%(prefix)s.sts
+BoardOutline=%(prefix)s.bor
+Drills=%(prefix)s.drd
+Repeat=3
+
+[Lightbar]
+Prefix=%(projdir)s/lightbar/lightbar
+*TopLayer=%(prefix)s.cmp
+*BottomLayer=%(prefix)s.sol
+*TopSilkscreen=%(prefix)s.plc
+*BottomSilkscreen=%(prefix)s.pls
+*TopSoldermask=%(prefix)s.stc
+*BottomSoldermask=%(prefix)s.sts
+Drills=%(prefix)s.drd
+BoardOutline=%(prefix)s.bor
+
+Repeat=10
