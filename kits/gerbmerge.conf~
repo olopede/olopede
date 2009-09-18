@@ -9,6 +9,7 @@ BottomMargin = 0.1
 XSpacing = 0.05
 YSpacing = 0.05
 CutLineWidth = 0.01
+PanelWidth = 
 
 [MergeOutputFiles]
 Prefix = %(mergeout)s
@@ -59,4 +60,4 @@ Prefix=%(projdir)s/lightbar/lightbar
 Drills=%(prefix)s.drd
 BoardOutline=%(prefix)s.bor
 
-Repeat=30
+Repeat=35
