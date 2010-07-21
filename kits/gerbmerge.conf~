@@ -1,0 +1,88 @@
+[DEFAULT]
+projdir = /media/74C0-22AC/muffinc/kits
+MergeOut = merge/merge
+[Options]
+LeftMargin   = 0.1
+RightMargin  = 0.1
+TopMargin    = 0.1
+BottomMargin = 0.1
+XSpacing = 0.05
+YSpacing = 0.05
+CutLineWidth = 0.01
+PanelWidth = 10
+PanelHeight = 6
+
+[MergeOutputFiles]
+Prefix = %(mergeout)s
+
+*TopLayer=%(prefix)s.cmp
+*BottomLayer=%(prefix)s.sol
+*TopSilkscreen=%(prefix)s.plc
+*BottomSilkscreen=%(prefix)s.pls
+*TopSoldermask=%(prefix)s.stc
+*BottomSoldermask=%(prefix)s.sts
+Drills=%(prefix)s.drd
+BoardOutline=%(prefix)s.bor
+#ToolList = toollist.%(prefix)s.drl
+#Placement = placement.%(prefix)s.txt
+
+[oloduino]
+Prefix=%(projdir)s/diplopoda/oloduino/oloduino
+*TopLayer=%(prefix)s.cmp
+*BottomLayer=%(prefix)s.sol
+*TopSilkscreen=%(prefix)s.plc
+*BottomSilkscreen=%(prefix)s.pls
+*TopSoldermask=%(prefix)s.stc
+*BottomSoldermask=%(prefix)s.sts
+Drills=%(prefix)s.drd
+BoardOutline=%(prefix)s.bor
+Repeat=2
+
+[Turing]
+Prefix=%(projdir)s/diplopoda/turing_base/turing_base
+*TopLayer=%(prefix)s.cmp
+*BottomLayer=%(prefix)s.sol
+*TopSilkscreen=%(prefix)s.plc
+*BottomSilkscreen=%(prefix)s.pls
+*TopSoldermask=%(prefix)s.stc
+*BottomSoldermask=%(prefix)s.sts
+BoardOutline=%(prefix)s.bor
+Drills=%(prefix)s.drd
+Repeat=2
+
+[Lightbar]
+Prefix=%(projdir)s/diplopoda/lightbar/lightbar
+*TopLayer=%(prefix)s.cmp
+*BottomLayer=%(prefix)s.sol
+*TopSilkscreen=%(prefix)s.plc
+*BottomSilkscreen=%(prefix)s.pls
+*TopSoldermask=%(prefix)s.stc
+*BottomSoldermask=%(prefix)s.sts
+Drills=%(prefix)s.drd
+BoardOutline=%(prefix)s.bor
+Repeat=20
+
+[Siggen]
+Prefix=%(projdir)s/annelid/siggen/siggen
+*TopLayer=%(prefix)s.cmp
+*BottomLayer=%(prefix)s.sol
+*TopSilkscreen=%(prefix)s.plc
+*BottomSilkscreen=%(prefix)s.pls
+*TopSoldermask=%(prefix)s.stc
+*BottomSoldermask=%(prefix)s.sts
+Drills=%(prefix)s.drd
+BoardOutline=%(prefix)s.bor
+Repeat=2
+
+[Claw Control]
+Prefix=/tmp/claw-control
+*TopLayer=%(prefix)s.cmp
+*BottomLayer=%(prefix)s.sol
+*TopSilkscreen=%(prefix)s.plc
+*BottomSilkscreen=%(prefix)s.pls
+*TopSoldermask=%(prefix)s.stc
+*BottomSoldermask=%(prefix)s.sts
+Drills=%(prefix)s.drd
+BoardOutline=%(prefix)s.bor
+
+Repeat=2
