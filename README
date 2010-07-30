@@ -1,0 +1,49 @@
+%pede
+
+
+
+All of the kit materials for a family of insects.
+
+Our kits materials are currently divided into two sections:
+
+kits/annelid/   - contains all analog kits
+ - Ampliflier/    - class-D amplifier
+ - siggen/        - function generator
+
+kits/diplopoda/ - contains all digital kits
+ - lightbar/      - strip of 8 LEDs & shift reg for use with turing machine
+ - microPOV/      - microscopic Persistance Of Vision toy reward
+ - oloduino/      - modular arduino clone
+ - turing_base/   - base for the turing machine: arduino shield or standalone
+
+The most interesting files are the .brd & .sch files (boards & schematics,
+respectively.) The files are in EagleCAD format, which is freely available for
+noncommercial use:
+
+    http://www.cadsoft.de/download.htm
+
+Most of the other files are gerbers, which are sent off to the PCB house to 
+manufacture our PCBs. We use the python script gerbmerge to panel our boards for
+prototyping. Our gerbmerge.conf file can be used as an example, but may not work
+on your system without modification. This program is freely available online:
+    
+    http://claymore.engineer.gvsu.edu/~steriana/Python/gerbmerge/
+
+The directory kits/merge/ shows one of our panels.
+
+In addition to useful files, there are a few backup files accidentally included 
+in the repository. Although we try to remove them, we occassionally add them 
+back in inadvertently. You can generally ignore files beginning with a period, 
+ending with a ~, or having a # in their extension.
+
+Additionally, nothing useful is currently in the code/ directory. The project in
+there is part of a special project that is still under development, yet has 
+little to do with %pede.
+
+
+Thanks again for your early support! If you have any questions, comments, or 
+nearly-insane rants, feel free to contact us!
+
+
+(We're keeping ourselves quiet & hidden by calling ourselves %pede for now)
+
