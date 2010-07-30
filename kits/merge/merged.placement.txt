@@ -1,10 +1,16 @@
-Turing*rotated90 0.200 0.200
-Siggen 2.500 0.200
-Siggen 2.500 1.900
-Lightbar 0.200 3.887
-Claw Control*rotated90 6.487 0.200
-Claw Control*rotated90 6.487 1.587
-oloduino*rotated90 7.686 0.200
-Lightbar 0.200 4.637
-Turing 2.582 3.599
-oloduino 6.269 3.808
+Lightbar*rotated90 0.200 0.200
+Lightbar*rotated90 0.950 0.200
+Lightbar*rotated90 1.699 0.200
+Lightbar*rotated90 2.449 0.200
+Lightbar*rotated90 3.198 0.200
+Lightbar 0.200 2.582
+Turing*rotated90 2.582 2.582
+oloduino 3.948 0.200
+Lightbar*rotated90 1.832 3.332
+Siggen*rotated90 4.882 2.374
+Lightbar*rotated90 0.200 3.332
+Lightbar*rotated90 0.950 3.332
+oloduino*rotated90 6.581 2.374
+Claw Control 7.556 0.200
+Lightbar 0.200 5.714
+Lightbar 6.581 5.982
