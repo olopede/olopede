@@ -47,7 +47,9 @@ help:
 	@echo "       ISP=${ISP}"
 	@echo "       PORT=${PORT}"
 
-COMPILE = avr-gcc -Wall -O2 -Iusbdrv -I. -DF_CPU=$(F_CPU) -mmcu=$(TARGET) # -DDEBUG_LEVEL=2
+
+CFLAGS = -DDEBUG_LEVEL=0 -std=gnu99 -Werror -funsigned-char -funsigned-bitfields -ffunction-sections -fpack-struct -fshort-enums -ffreestanding -g -gdwarf-2 -fno-inline-small-functions -fno-split-wide-types -fno-tree-scev-cprop -Wl,--relax,--gc-sections 
+COMPILE = avr-gcc -Wall -O2 -Iusbdrv -I. $(CFLAGS) -DF_CPU=$(F_CPU) -DDEBUG_LEVEL=0 -mmcu=$(TARGET) # -DDEBUG_LEVEL=2
 
 OBJECTS = usbdrv/usbdrv.o usbdrv/usbdrvasm.o usbdrv/oddebug.o isp.o clock.o uart.o main.o
 
