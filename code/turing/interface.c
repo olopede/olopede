@@ -36,7 +36,7 @@ void disp7Seg(uint8_t v){
     #endif
     
     #if SEG_DISP_T != 0
-    _delay_ms(SEG_DISP_T);
+    delay_ms_poll(SEG_DISP_T);
     #endif
 }
 

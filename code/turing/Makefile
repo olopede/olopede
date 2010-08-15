@@ -14,11 +14,12 @@ F_CPU   = 8000000	# in Hz
 #AVRDUDE = avrdude -p $(DEVICE) -P /dev/ttyUSB0 -c avrisp -b 19200 -F
 AVRDUDE = avrdude -p $(DEVICE) -c usbasp
 
-CFLAGS  = -I. -DDEBUG_LEVEL=0 -std=gnu99 -W -Wall -pedantic -Wstrict-prototypes -Wundef -Werror -funsigned-char -funsigned-bitfields -ffunction-sections -fpack-struct -fshort-enums -ffreestanding -g -gdwarf-2 --combine  -fno-inline-small-functions -fno-split-wide-types -fno-tree-scev-cprop -Wl,--relax,--gc-sections
-OBJECTS = interface.o main.o
-COBJECTS = interface.c main.c
+# Excellent resource for optimizing cflags: http://www.tty1.net/blog/2008-04-29-avr-gcc-optimisations_en.html
+CFLAGS  = -I. -DDEBUG_LEVEL=0 -std=gnu99 -Os -W -Wall -pedantic -Wstrict-prototypes -Wundef -Werror -funsigned-char -funsigned-bitfields -ffunction-sections -fpack-struct -fshort-enums -ffreestanding -g -gdwarf-2  -fno-inline-small-functions -fno-split-wide-types -fno-tree-scev-cprop -Wl,--relax,--gc-sections
+OBJECTS = interface.o turing.o main.o
+COBJECTS = interface.c turing.c main.c
 
-COMPILE = avr-gcc -Wall -Os -DF_CPU=$(F_CPU) $(CFLAGS) -mmcu=$(DEVICE)
+COMPILE = avr-gcc -Wall  -DF_CPU=$(F_CPU) $(CFLAGS) -mmcu=$(DEVICE)
 
 
 # symbolic targets:
@@ -66,8 +67,9 @@ clean:
 
 # file targets:
 
+# Use -fwhole-program for huge, free space reductions
 main.elf: $(COBJECTS)
-	$(COMPILE) -fwhole-program -o main.elf $(COBJECTS)
+	$(COMPILE) --combine -fwhole-program -o main.elf $(COBJECTS)
 
 main.hex: main.elf
 	rm -f main.hex main.eep.hex

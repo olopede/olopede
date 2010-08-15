@@ -1,6 +1,5 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <util/delay.h>
 
 #define SET_DISP        PORTB &= ~0x01; DDRB |= 0x01
 #define RST_DISP        PORTB |= 0x01;  DDRB &= ~0x01
