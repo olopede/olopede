@@ -2,12 +2,17 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#define SET_DISP        PORTB &= ~0x01
-#define RST_DISP        PORTB |= 0x01
+#define SET_DISP        PORTB &= ~0x01; DDRB |= 0x01
+#define RST_DISP        PORTB |= 0x01;  DDRB &= ~0x01
 
-#define SEG_B_MASK     0b00000000
-#define SEG_C_MASK     0b00111110
-#define SEG_D_MASK     0b11000000
+#define SET_BTNR        PORTB &= ~0x02; DDRB |= 0x02
+#define RST_BTNR        PORTB |= 0x02;  DDRB &= ~0x02
+
+#define SEG_B_MASK      0x00 //0b00000000
+#define SEG_C_MASK      0x3e //0b00111110
+#define SEG_D_MASK      0xc0 //0b11000000
+
+#define SEG_DISP_T      1
 
 /*
  * -bar--->--avr
@@ -33,9 +38,35 @@
 #define SHIFT_STR_SET  SHIFT_PORT |= SHIFT_STR
 #define SHIFT_STR_RST  SHIFT_PORT &= ~SHIFT_STR
 
+#define SHIFT_STR_EN   SHIFT_STR_SET;SHIFT_STR_RST
+
 #define POT_PIN        0
 
-void interfaceSetup();
-void disp7Seg(uint8_t v);
-int readPo(void);
-void shiftByte(uint8_t v);
+void interfaceSetup(void);
+void disp7Seg(uint8_t);
+int readPot(void);
+
+void _shiftByte(uint8_t);
+void shiftByte(uint8_t);
+void shiftData(uint8_t *v, uint8_t);
+
+
+
+#define BTN_READ            0x01
+#define BTN_DEBOUNCE_TIME   30      // in ms
+
+uint8_t btnPress;
+uint8_t btnState;
+uint8_t btnDebounce;
+unsigned long btnDebounceTimeout;
+
+void btnPoll(void);
+uint8_t btnRead(void);
+
+
+void delay_ms_poll(int);
+
+/* Shamelessly stolen from the Arduino Wiring library */
+unsigned long millis(void);
+void delay_ms(unsigned long);
+void initTimers(void);

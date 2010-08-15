@@ -14,8 +14,9 @@ F_CPU   = 8000000	# in Hz
 #AVRDUDE = avrdude -p $(DEVICE) -P /dev/ttyUSB0 -c avrisp -b 19200 -F
 AVRDUDE = avrdude -p $(DEVICE) -c usbasp
 
-CFLAGS  = -I. -DDEBUG_LEVEL=0
+CFLAGS  = -I. -DDEBUG_LEVEL=0 -std=gnu99 -W -Wall -pedantic -Wstrict-prototypes -Wundef -Werror -funsigned-char -funsigned-bitfields -ffunction-sections -fpack-struct -fshort-enums -ffreestanding -g -gdwarf-2 --combine  -fno-inline-small-functions -fno-split-wide-types -fno-tree-scev-cprop -Wl,--relax,--gc-sections
 OBJECTS = interface.o main.o
+COBJECTS = interface.c main.c
 
 COMPILE = avr-gcc -Wall -Os -DF_CPU=$(F_CPU) $(CFLAGS) -mmcu=$(DEVICE)
 
@@ -48,8 +49,8 @@ clean:
 	rm -f main.hex main.lst main.obj main.cof main.list main.map main.eep.hex main.elf *.o 
 
 # Generic rule for compiling C files:
-.c.o:
-	$(COMPILE) -c $< -o $@
+#.c.o:
+#	$(COMPILE) -c $< -o $@
 
 # Generic rule for assembling Assembler source files:
 .S.o:
@@ -65,13 +66,14 @@ clean:
 
 # file targets:
 
-main.elf: $(OBJECTS)
-	$(COMPILE) -o main.elf $(OBJECTS)
+main.elf: $(COBJECTS)
+	$(COMPILE) -fwhole-program -o main.elf $(COBJECTS)
 
 main.hex: main.elf
 	rm -f main.hex main.eep.hex
 	avr-objcopy -j .text -j .data -O ihex main.elf main.hex
 	avr-size main.hex
+
 
 # debugging targets:
 
