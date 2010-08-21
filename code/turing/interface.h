@@ -41,13 +41,13 @@
 
 #define POT_PIN        0
 
-void interfaceSetup(void);
-void disp7Seg(uint8_t);
-int readPot(void);
+void interface_setup(void);
+void disp_7seg(uint8_t);
+int read_pot(void);
 
-void _shiftByte(uint8_t);
-void shiftByte(uint8_t);
-void shiftData(uint8_t *v, uint8_t);
+void _shift_byte(uint8_t);
+void shift_byte(uint8_t);
+void shift_data(uint8_t *v, uint8_t);
 
 
 
@@ -59,8 +59,8 @@ uint8_t btnState;
 uint8_t btnDebounce;
 unsigned long btnDebounceTimeout;
 
-void btnPoll(void);
-uint8_t btnRead(void);
+void btn_poll(void);
+uint8_t btn_read(void);
 
 
 void delay_ms_poll(int);
@@ -68,4 +68,4 @@ void delay_ms_poll(int);
 /* Shamelessly stolen from the Arduino Wiring library */
 unsigned long millis(void);
 void delay_ms(unsigned long);
-void initTimers(void);
+void init_timers(void);

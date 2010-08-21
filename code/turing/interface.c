@@ -6,14 +6,14 @@
 #define NOP asm("nop")
 
 
-void interfaceSetup(){
-    initTimers();
+void interface_setup(){
+    init_timers();
     DDRD = 0x1C;
     //DDRC = 0xfe;
     //DDRB = 0xff;
 }
 
-void disp7Seg(uint8_t v){
+void disp_7seg(uint8_t v){
     //C[1:5], D[6:7]
     RST_BTNR;
     SET_DISP;
@@ -40,7 +40,7 @@ void disp7Seg(uint8_t v){
     #endif
 }
 
-void _shiftByte(uint8_t v){
+void _shift_byte(uint8_t v){
     uint8_t i;
     for(i = 1; i; i <<= 1){
         if(v & i)
@@ -52,18 +52,18 @@ void _shiftByte(uint8_t v){
         SHIFT_CLK_RST;
     }
 }
-void shiftByte(uint8_t v){
-    _shiftByte(v);
+void shift_byte(uint8_t v){
+    _shift_byte(v);
     SHIFT_STR_EN;
 }
 
-void shiftData(uint8_t *v, uint8_t len){
+void shift_data(uint8_t *v, uint8_t len){
     for(uint8_t i = 0; i < len; i++){
-        _shiftByte(v[i]);
+        _shift_byte(v[i]);
     }
     SHIFT_STR_EN;
 }
-int readPot(void){
+int read_pot(void){
     DDRC &= ~(1 << POT_PIN);
 	uint8_t low, high;
     ADCSRA |= (1 << ADEN);
@@ -92,7 +92,7 @@ int readPot(void){
 	return (high << 8) | low;
 }
 
-void btnPoll(){
+void btn_poll(){
     uint8_t _portb, _portc, _portd, _btnState; // Previous states
 
     _portb = PORTB;
@@ -150,8 +150,8 @@ void btnPoll(){
     SET_DISP;
 }
 
-uint8_t btnRead(){
-    btnPoll();
+uint8_t btn_read(){
+    btn_poll();
     // btnPress should have BTN_READ bit unset
     btnPress |= BTN_READ;
     //btnRead = btnPress;
@@ -172,13 +172,13 @@ uint8_t btnRead(){
  * with the analog input & 7seg code, because they use the same pins
  */
 void delay_ms_poll(int t){
-    btnPoll();
+    btn_poll();
     for(;t > BTN_DEBOUNCE_TIME; t -= BTN_DEBOUNCE_TIME){ 
         delay_ms(BTN_DEBOUNCE_TIME);
-        btnPoll();
+        btn_poll();
     }
     delay_ms(t);
-    btnPoll();
+    btn_poll();
 }
 
 /* Shamelessly stolen from the Arduino Wiring library */
@@ -228,16 +228,14 @@ unsigned long millis(){
 	return m;
 }
 
-void delay_ms(unsigned long ms)
-{
+void delay_ms(unsigned long ms){
     /* this function is cheaper than _delay_ms for flash */
 	unsigned long start = millis();
 	
 	while (millis() - start <= ms);
 }
 
-void initTimers()
-{
+void init_timers(){
 #ifndef cbi
 #define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
 #endif
