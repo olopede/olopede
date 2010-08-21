@@ -16,7 +16,8 @@ CLOCK   = 16000000
 #FUSE_L  = # see below for fuse values for particular devices
 #FUSE_H  = 
 #AVRDUDE = avrdude -c dapa -P /dev/parport0 -p $(DEVICE) # edit this line for your programmer
-AVRDUDE = avrdude -p $(DEVICE) -P /dev/ttyUSB0 -c avrisp -b 19200 -F
+#AVRDUDE = avrdude -p $(DEVICE) -P /dev/ttyUSB0 -c avrisp -b 19200
+AVRDUDE = avrdude -p $(TARGET) -c usbasp
 
 # ISP=bsd      PORT=/dev/parport0
 # ISP=ponyser  PORT=/dev/ttyS1
@@ -88,13 +89,13 @@ cpp:
 	$(COMPILE) -E main.c
 
 flash:
-	avrdude -c ${ISP} -p ${TARGET} -P ${PORT} -U flash:w:main.hex
+	$(AVRDUDE) -U flash:w:main.hex
 
 fuses:
-	avrdude -c ${ISP} -p ${TARGET} -P ${PORT} -u -U hfuse:w:$(HFUSE):m -U lfuse:w:$(LFUSE):m
+	$(AVRDUDE) -u -U hfuse:w:$(HFUSE):m -U lfuse:w:$(LFUSE):m
 
 avrdude:
-	avrdude -c ${ISP} -p ${TARGET} -P ${PORT} -v
+	$(AVRDUDE) -v
 
 # Fuse atmega8 high byte HFUSE:
 # 0xc9 = 1 1 0 0   1 0 0 1 <-- BOOTRST (boot reset vector at 0x0000)
