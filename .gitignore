@@ -1,0 +1,4 @@
+# Ignore Eagle's backup files
+*.*#*
+# Ignore ~ backup files
+*.*~
