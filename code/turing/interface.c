@@ -1,10 +1,12 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/pgmspace.h>
 
 #include "interface.h"
 
-#define NOP asm("nop")
+#define NOP asm("nop")                   
 
+uint8_t seg_digits[11] = {0x7E, 0x0C, 0xB6, 0x00, 0x00, 0x00, 0x00, 0xFE, 0x00, 0x00, 0xEC};
 
 void interface_setup(){
     init_timers();
@@ -40,9 +42,14 @@ void disp_7seg(uint8_t v){
     #endif
 }
 
+void disp_7seg_digit(uint8_t v){
+    if(v >= 10)
+        v = 10;
+    disp_7seg(seg_digits[v]);
+}
 void _shift_byte(uint8_t v){
     uint8_t i;
-    for(i = 1; i; i <<= 1){
+    for(i = 0x80; i; i >>= 1){
         if(v & i)
             SHIFT_D_SET;
         else

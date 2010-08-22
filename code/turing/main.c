@@ -1,5 +1,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <string.h>
+
 
 #include "interface.h"
 #include "turing.h"
@@ -8,27 +10,33 @@ void main(void) __attribute__ ((noreturn));
 
 void main(void){
     uint8_t i;
-    uint8_t disp[5];
+    
     interface_setup();
-    disp[1] = 0x00;
     tape_clear();
-    //tape_putint(44511); //fib seq
+    /*
+    tape_putchar(0xAD); //0b10101101);
+    tpos += 8;
+    tape_putchar(0xDF); //0b11011111);
+    tpos -= 8; //fib seq
+    */
+    
+    
+    uint8_t busybeaver[6] = {0x83, 0x05, 0x01, 0x83, 0x03, 0x7F};
+    memcpy(states, busybeaver, 6);
     for(i = 0;;i++){
-        
-        disp[0] = btnState;
-        //if(i % 10 == 0)
-        disp[2] = btnPress;
-        if(btn_read() & 0x02)    
-            disp[1] ^= 0xff;
-        //disp[2] = btnPress;
-        //shift_data(disp, 3);
         //disp_tape();
+        tape[tpos/8] ^= 1 << (tpos % 8);
         shift_data(tape, 3);
-        disp_7seg((read_pot() & 0xff));
+        delay_ms_poll(1);
+        tape[tpos/8] ^= 1 << (tpos % 8);
+        shift_data(tape, 3);
+        disp_7seg_digit(state >> 1);
         
+        if(btn_read() & 0x02){
+            //TAPE_MV_UP;
+            turing_step();
+        }
         
-        delay_ms_poll(50);
-        //disp7Seg((millis() >> 5) & 0xff);
-        
+        delay_ms_poll(20);        
     }
 }
