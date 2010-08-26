@@ -17,7 +17,7 @@ AVRDUDE = avrdude -p $(DEVICE) -c usbasp
 # Excellent resource for optimizing cflags: http://www.tty1.net/blog/2008-04-29-avr-gcc-optimisations_en.html
 CFLAGS  = -I. -DDEBUG_LEVEL=0 -std=gnu99 -Os -W -Wall -pedantic -Wstrict-prototypes -Wundef -Werror -funsigned-char -funsigned-bitfields -ffunction-sections -fpack-struct -fshort-enums -ffreestanding -g -gdwarf-2  -fno-inline-small-functions -fno-split-wide-types -fno-tree-scev-cprop -Wl,--relax,--gc-sections
 OBJECTS = interface.o turing.o main.o
-COBJECTS = interface.c turing.c main.c
+COBJECTS = interface.cpp turing.cpp main.cpp
 
 COMPILE = avr-gcc -Wall  -DF_CPU=$(F_CPU) $(CFLAGS) -mmcu=$(DEVICE)
 
