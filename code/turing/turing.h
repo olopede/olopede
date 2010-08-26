@@ -16,15 +16,22 @@
 #define TAPE_MV_DN    ++tpos; if(tpos >= TAPESIZE){ tpos = 0; }
 #define TAPE_MV_UP    if(tpos > 0){ tpos--; } else { tpos = TAPESIZE-1; }
 
-uint8_t tape[BTAPESIZE];
-uint16_t tpos;
+extern struct Turing {
+    uint8_t *tape; //[BTAPESIZE]
+    uint16_t tpos;        // Position
+    uint8_t state;        // Initial state
+    uint8_t *states;      // State array
+} turing;
 
 
-void tape_clear(void);
-void tape_putchar(uint8_t);
-uint8_t tape_getsym(void);
-void tape_putsym(uint8_t);
-void disp_tape(void);
+void tape_clear(struct Turing *turing);
+void tape_putchar(struct Turing *turing, uint8_t);  // For debugging/initializing
+uint8_t tape_getsym(struct Turing *turing);
+void tape_putsym(struct Turing *turing, uint8_t);
+void tape_move_up(struct Turing *turing);
+void tape_move_dn(struct Turing *turing);
+
+void disp_tape(struct Turing *turing);
 
 /*
  * Turing logic
@@ -52,7 +59,7 @@ void disp_tape(void);
 // states[state | sym] = direction | state | sym
 // states[0bxxQQQQQY] = 0bDDQQQQQY   // With NOP, 32 states max
 // states[0bxQQQQQQY] = 0bDQQQQQQY   // Without NOP, 64 states max
-uint8_t states[TURING_STATES << 1];  // Two items per state (sym 0, 1)
-uint8_t state;
+//uint8_t states[TURING_STATES << 1];  // Two items per state (sym 0, 1)
+//uint8_t state;
 
-void turing_step(void);
+void turing_step(struct Turing *turing);
