@@ -10,9 +10,9 @@ void main(void) __attribute__ ((noreturn));
 
 void main(void){
     uint8_t i;
-    struct Turing *turing;
+    Turing turing = Turing();
     interface_setup();
-    tape_clear(turing);
+    turing.tape_clear();
     /*
     tape_putchar(0xAD); //0b10101101);
     tpos += 8;
@@ -24,7 +24,7 @@ void main(void){
     uint8_t busybeaver[6] = {0x83, 0x05, 0x01, 0x83, 0x03, 0x7F};
     //memcpy(states, busybeaver, 6);
     
-    turing->states = busybeaver;
+    turing.states = busybeaver;
     for(i = 0;;i++){
         //disp_tape();
         //tape[tpos/8] ^= 1 << (tpos % 8);
@@ -36,7 +36,7 @@ void main(void){
         
         if(btn_read() & 0x02){
             //TAPE_MV_UP;
-            turing_step(turing);
+            turing.turing_step();
         }
         
         delay_ms_poll(20);        

@@ -2,6 +2,10 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 
+
+
+
+
 #define SET_DISP        PORTB &= ~0x01; DDRB |= 0x01
 #define RST_DISP        PORTB |= 0x01;  DDRB &= ~0x01
 
@@ -42,8 +46,6 @@
 
 #define POT_PIN        0
 
-uint8_t seg_digits[11];
-
 void interface_setup(void);
 void disp_7seg(uint8_t);
 void disp_7seg_digit(uint8_t);
@@ -58,10 +60,6 @@ void shift_data(uint8_t *v, uint8_t);
 #define BTN_READ            0x01
 #define BTN_DEBOUNCE_TIME   30      // in ms
 
-uint8_t btnPress;
-uint8_t btnState;
-uint8_t btnDebounce;
-unsigned long btnDebounceTimeout;
 
 void btn_poll(void);
 uint8_t btn_read(void);
@@ -73,3 +71,5 @@ void delay_ms_poll(int);
 unsigned long millis(void);
 void delay_ms(unsigned long);
 void init_timers(void);
+
+

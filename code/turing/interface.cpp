@@ -6,7 +6,13 @@
 
 #define NOP asm("nop")                   
 
-uint8_t seg_digits[11] = {0x7E, 0x0C, 0xB6, 0x00, 0x00, 0x00, 0x00, 0xFE, 0x00, 0x00, 0xEC};
+
+uint8_t btnPress;
+uint8_t btnState;
+//uint8_t btnDebounce;
+//unsigned long btnDebounceTimeout;
+static uint8_t seg_digits[11] = {0x7E, 0x0C, 0xB6, 0x00, 0x00, 0x00, 0x00, 0xFE, 0x00, 0x00, 0xEC};
+
 
 void interface_setup(){
     init_timers();
@@ -43,10 +49,13 @@ void disp_7seg(uint8_t v){
 }
 
 void disp_7seg_digit(uint8_t v){
+    
     if(v >= 10)
         v = 10;
     disp_7seg(seg_digits[v]);
 }
+
+
 void _shift_byte(uint8_t v){
     uint8_t i;
     for(i = 0x80; i; i >>= 1){
@@ -86,7 +95,7 @@ int read_pot(void){
 	ADCSRA |= 1 << ADSC;
 
 	// ADSC is cleared when the conversion finishes
-	while (ADCSRA & (1 << ADSC));
+	while (ADCSRA & (1 << ADSC)) ;
 
 	// we have to read ADCL first; doing so locks both ADCL
 	// and ADCH until ADCH is read.  reading ADCL second would
@@ -239,7 +248,7 @@ void delay_ms(unsigned long ms){
     /* this function is cheaper than _delay_ms for flash */
 	unsigned long start = millis();
 	
-	while (millis() - start <= ms);
+	while (millis() - start <= ms) ;
 }
 
 void init_timers(){
