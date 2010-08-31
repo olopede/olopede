@@ -25,18 +25,30 @@ void main(void){
     //memcpy(states, busybeaver, 6);
     
     turing.states = busybeaver;
+    
     for(i = 0;;i++){
-        //disp_tape();
-        //tape[tpos/8] ^= 1 << (tpos % 8);
-        //shift_data(tape, 3);
-        delay_ms_poll(1);
-        //tape[tpos/8] ^= 1 << (tpos % 8);
-        //shift_data(tape, 3);
-        //disp_7seg_digit(state >> 1);
+        //turing.disp_tape();
+        //turing.tape[1] = 'U';
+        //turing.tape[turing.tpos/8] ^= 1 << (turing.tpos % 8);
+        //shift_data(turing.tape, 3);
+        //delay_ms_poll(1);
+        //turing.tape[turing.tpos/8] ^= 1 << (turing.tpos % 8);
+        //shift_data(turing.tape, 3);
+        disp_7seg_digit(turing.state >> 1);
         
-        if(btn_read() & 0x02){
+        turing.disp_tape();
+        if(btn_read_cached() & (BTN_CTR | BTN_SR)){
             //TAPE_MV_UP;
             turing.turing_step();
+        }
+        if(btn_read_cached() & BTN_DL){
+            turing.tape_move_dn();
+        }
+        if(btn_read_cached() & BTN_DR){
+            turing.tape_move_up();
+        }
+        if(btn_read_cached() & BTN_DU){
+            turing.tape_flipsym();
         }
         
         delay_ms_poll(20);        

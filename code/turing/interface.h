@@ -60,8 +60,17 @@ void shift_data(uint8_t *v, uint8_t);
 #define BTN_READ            0x01
 #define BTN_DEBOUNCE_TIME   30      // in ms
 
+#define BTN_CTR             0x02
+#define BTN_SL              0x04
+#define BTN_SR              0x01
+#define BTN_DU              0x08
+#define BTN_DR              0x10
+#define BTN_DD              0x20
+#define BTN_DL              0x40
+
 
 void btn_poll(void);
+uint8_t btn_read_cached(void);
 uint8_t btn_read(void);
 
 

@@ -58,7 +58,7 @@ void disp_7seg_digit(uint8_t v){
 
 void _shift_byte(uint8_t v){
     uint8_t i;
-    for(i = 0x80; i; i >>= 1){
+    for(i = 0x01; i; i <<= 1){  //TODO: Should probably be reversed in next revision
         if(v & i)
             SHIFT_D_SET;
         else
@@ -166,8 +166,7 @@ void btn_poll(){
     SET_DISP;
 }
 
-uint8_t btn_read(){
-    btn_poll();
+uint8_t btn_read_cached(){
     // btnPress should have BTN_READ bit unset
     btnPress |= BTN_READ;
     //btnRead = btnPress;
@@ -177,6 +176,11 @@ uint8_t btn_read(){
     #warning "BTN_READ bit is not yet supported. expect strange behavior from btnPress!"
     return btnPress;
     #endif
+}
+
+uint8_t btn_read(){
+    btn_poll();
+    return btn_read_cached();
 }
 
 

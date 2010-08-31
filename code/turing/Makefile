@@ -10,9 +10,9 @@ DEVICE  = atmega168
 F_CPU   = 8000000	# in Hz
 #FUSE_L  = 
 #FUSE_H  = 
-#AVRDUDE = avrdude -c dapa -P /dev/parport0 -p $(DEVICE) # edit this line for your programmer
+AVRDUDE = avrdude -c dapa -P /dev/parport0 -p $(DEVICE) # edit this line for your programmer
 #AVRDUDE = avrdude -p $(DEVICE) -P /dev/ttyUSB0 -c avrisp -b 19200 -F
-AVRDUDE = avrdude -p $(DEVICE) -c usbasp
+#AVRDUDE = avrdude -p $(DEVICE) -c usbasp
 
 # Excellent resource for optimizing cflags: http://www.tty1.net/blog/2008-04-29-avr-gcc-optimisations_en.html
 CPPFLAGS  = -I. -DDEBUG_LEVEL=0 -Os -W -Wall -pedantic -Wundef -Werror -funsigned-char -funsigned-bitfields -ffunction-sections -fpack-struct -fshort-enums -ffreestanding -g -gdwarf-2  -fno-inline-small-functions -fno-split-wide-types -fno-tree-scev-cprop -Wl,--relax,--gc-sections 

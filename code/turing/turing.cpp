@@ -1,9 +1,11 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
+#include <string.h>
 
 #include "turing.h"
 #include "interface.h"
+
 
 //uint8_t states[6] = {0x83, 0x05, 0x01, 0x83, 0x03, 0x7F}; //busybeaver
 void Turing::tape_clear(){
@@ -19,7 +21,7 @@ void Turing::tape_putchar(uint8_t v){
 }
 
 uint8_t Turing::tape_getsym(){
-    return tape[tpos/8] & (1 << (tpos % 8)) ? 1 : 0;
+    return !!(tape[tpos/8] & (1 << (tpos % 8)));
 }
 
 void Turing::tape_putsym(uint8_t v){
@@ -28,6 +30,10 @@ void Turing::tape_putsym(uint8_t v){
     }else{
         tape[tpos/8] &= ~(1 << (tpos % 8));
     }
+}
+
+void Turing::tape_flipsym(){
+    tape[tpos/8] ^= (1 << (tpos % 8));
 }
 
 void Turing::tape_move_up(){
@@ -47,29 +53,20 @@ void Turing::tape_move_dn(){
 
 void Turing::disp_tape(){
     uint8_t vtape[LIGHTBARS];
+    memset(vtape, 0x00, LIGHTBARS);
     // Start at tpos?
-    for(uint8_t i = 0; i < LIGHTBARS; i++){
+    for(uint8_t i = 0; i < LIGHTBARS * 8; i++){
     
         //vtape[i] = (tape[tpos/8 + i] << (tpos % 8)) | (tape[tpos/8 + i + 1] >> (8 - tpos % 8));
     
-        int16_t pos = tpos/8 + i - TPOS_OFFSET/8;
-        uint8_t mod = (tpos + TPOS_OFFSET) % 8;
+        uint8_t pos = (i - TPOS_OFFSET + tpos + TAPESIZE) % TAPESIZE;
         
-        if(pos < 0){
-            pos += BTAPESIZE;
-        }else if(pos >= BTAPESIZE){
-            pos -= BTAPESIZE;
-        }
-        vtape[i] = (tape[pos] << (mod));
+        vtape[i/8] |= (!!(tape[pos/8] & (1 << (pos % 8)))) << (i % 8);
         
-        pos++;
+        //pos++;
+        //pos %= BTAPESIZE;
         
-        if(pos < 0){
-            pos += BTAPESIZE;
-        }else if(pos >= BTAPESIZE){
-            pos -= BTAPESIZE;
-        }
-        vtape[i] |= (tape[pos] >> (8 - mod));
+        //vtape[i] |= (tape[pos] >> (8 - mod));
         
     }
     shift_data(vtape, LIGHTBARS);
@@ -94,4 +91,9 @@ void Turing::turing_step(){
     }else{
         tape_move_dn();
     }
+}
+
+Turing::Turing(){
+    state = 0;
+    tpos = 0;
 }

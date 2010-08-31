@@ -11,7 +11,7 @@
 #define LIGHTBARS     3             // How many lightbars of 8 are visible
 #define TAPESIZE      24            // Total size of tape, not always visible.
 #define BTAPESIZE     (TAPESIZE/8)  // How large is the array to hold the tapesize
-#define TPOS_OFFSET   8             // How far from the edge to display the "current" center 
+#define TPOS_OFFSET   2         // How far from the edge to display the "current" center 
 
 #define TAPE_MV_DN    ++tpos; if(tpos >= TAPESIZE){ tpos = 0; }
 #define TAPE_MV_UP    if(tpos > 0){ tpos--; } else { tpos = TAPESIZE-1; }
@@ -23,10 +23,13 @@ class Turing {
     uint8_t state;        // Initial state
     uint8_t *states;      // State array
     
+    Turing(void);
+    
     void tape_clear(void);
     void tape_putchar(uint8_t);
     uint8_t tape_getsym(void);
     void tape_putsym(uint8_t);
+    void tape_flipsym(void);
     void tape_move_up(void);
     void tape_move_dn(void);
     
