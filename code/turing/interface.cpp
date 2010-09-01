@@ -11,7 +11,7 @@ uint8_t btnPress;
 uint8_t btnState;
 //uint8_t btnDebounce;
 //unsigned long btnDebounceTimeout;
-static uint8_t seg_digits[11] = {0x7E, 0x0C, 0xB6, 0x00, 0x00, 0x00, 0x00, 0xFE, 0x00, 0x00, 0xEC};
+static uint8_t seg_digits[11] = {0x7E, 0x0C, 0xB6, 0x00, 0x00, 0x00, 0x00, 0xFE, 0xFE, 0x00, 0xEC};
 
 
 void interface_setup(){
@@ -49,9 +49,11 @@ void disp_7seg(uint8_t v){
 }
 
 void disp_7seg_digit(uint8_t v){
-    
-    if(v >= 10)
+    if(v == 0x1F)
         v = 10;
+    if(v > 10)
+        v = 8;
+    
     disp_7seg(seg_digits[v]);
 }
 

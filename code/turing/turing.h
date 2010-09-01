@@ -9,12 +9,12 @@
  */
 
 #define LIGHTBARS     3             // How many lightbars of 8 are visible
-#define TAPESIZE      24            // Total size of tape, not always visible.
+#define TAPESIZE      40             // Total size of tape, not always visible.
 #define BTAPESIZE     (TAPESIZE/8)  // How large is the array to hold the tapesize
-#define TPOS_OFFSET   2         // How far from the edge to display the "current" center 
+#define TPOS_OFFSET   LIGHTBARS*4   // How far from the edge to display the "current" center 
 
-#define TAPE_MV_DN    ++tpos; if(tpos >= TAPESIZE){ tpos = 0; }
-#define TAPE_MV_UP    if(tpos > 0){ tpos--; } else { tpos = TAPESIZE-1; }
+//#define TAPE_MV_DN    ++tpos; if(tpos >= TAPESIZE){ tpos = 0; }
+//#define TAPE_MV_UP    if(tpos > 0){ tpos--; } else { tpos = TAPESIZE-1; }
 
 class Turing {
   public:
@@ -53,12 +53,13 @@ void disp_tape(void);
  */
 
 
-#define TURING_STATES   3           // How many states you want your turing machine to have
+#define TURING_MAX_STATES   5       // How many states you want your turing machine to have
                                     // If greater than 32, then you cannot use the NOP instruction
+                                    // Not strictly enforced, just for NOP
 #define TURING_SYM_MASK 0x01
 #define TURING_MV_MASK 0x80         // 0b1xxxxxxx for up, 0b0xxxxxxx for down          
 
-#if TURING_STATES > 32              // Cannot use NOP if more than 31 states
+#if TURING_MAX_STATES < 32              // Cannot use NOP if more than 31 states
 #define TURING_NOP_MASK 0x40        // 0bx1xxxxxx for nop
 #define TURING_STATE_MASK 0x3E
 

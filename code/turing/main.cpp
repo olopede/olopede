@@ -21,10 +21,12 @@ void main(void){
     */
     
     
-    uint8_t busybeaver[6] = {0x83, 0x05, 0x01, 0x83, 0x03, 0x7F};
+    //uint8_t busybeaver[6] = {0x83, 0x05, 0x01, 0x83, 0x03, 0x7F};
+    uint8_t copier[10] = {0x3E, 0x82, 0x84, 0x83, 0x07, 0x85, 0x08, 0x07, 0x81, 0x09};
     //memcpy(states, busybeaver, 6);
     
-    turing.states = busybeaver;
+    //turing.states = busybeaver;
+    turing.states = copier;
     
     for(i = 0;;i++){
         //turing.disp_tape();
@@ -35,9 +37,12 @@ void main(void){
         //turing.tape[turing.tpos/8] ^= 1 << (turing.tpos % 8);
         //shift_data(turing.tape, 3);
         disp_7seg_digit(turing.state >> 1);
-        
+        turing.tape_flipsym();
         turing.disp_tape();
-        if(btn_read_cached() & (BTN_CTR | BTN_SR)){
+        delay_ms_poll(5);
+        turing.tape_flipsym();
+        turing.disp_tape();
+        if(btn_read_cached() & BTN_CTR){
             //TAPE_MV_UP;
             turing.turing_step();
         }
@@ -49,6 +54,9 @@ void main(void){
         }
         if(btn_read_cached() & BTN_DU){
             turing.tape_flipsym();
+        }
+        if(btn_read_cached() & BTN_SR){
+            turing.state = 0;
         }
         
         delay_ms_poll(20);        
