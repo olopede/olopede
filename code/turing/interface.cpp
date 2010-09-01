@@ -21,6 +21,11 @@ void interface_setup(){
     //DDRB = 0xff;
 }
 
+SIGNAL(TIMER1_OVF_vect){
+    // Timer1 overflow -- poll buttons
+    btn_poll();
+}
+
 void disp_7seg(uint8_t v){
     //C[1:5], D[6:7]
     RST_BTNR;
