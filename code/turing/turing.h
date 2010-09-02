@@ -4,8 +4,8 @@
 
 #include "interface.h"
 
-#ifndef __turing_h_include__
-#define __turing_h_include__
+#ifndef turing_h_include
+#define turing_h_include
 
 /*
  * Tape interface
@@ -82,4 +82,4 @@ void disp_tape(void);
 //uint8_t state;
 
 
-#endif //__turing_h_include__
+#endif //turing_h_include

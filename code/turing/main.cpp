@@ -42,6 +42,7 @@ void main(void){
         delay_ms(5);
         turing.tape_flipsym();
         turing.disp_tape();
+        
 
         if(btn_read() & BTN_CTR){
             //TAPE_MV_UP;

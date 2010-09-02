@@ -6,7 +6,7 @@
 
 #define NOP asm("nop")                   
 
-
+uint8_t asdf;
 uint8_t btnPress;
 uint8_t btnState;
 //uint8_t btnDebounce;
@@ -17,7 +17,7 @@ void interface_setup(){
 
     init_timers();
     DDRD = 0x1C;
-    OCR1A = 20;
+    OCR1A = BTN_TIMER_CMP;
     
     //DDRC = 0xfe;
     //DDRB = 0xff;
@@ -35,6 +35,7 @@ ISR(TIMER1_COMPA_vect){
 
     cli();
     btn_poll();
+    asdf++;
     sei();
 }
 
@@ -314,14 +315,34 @@ void init_timers(){
 	sbi(TIMSK0, TOIE0);
 #endif
 
-	// timers 1 and 2 are used for phase-correct hardware pwm
-	// this is better for motors as it ensures an even waveform
-	// note, however, that fast pwm mode can achieve a frequency of up
-	// 8 MHz (with a 16 MHz clock) at 50% duty cycle
+	// timers 1 and 2
 
-	// set timer 1 prescale factor to 64
-	sbi(TCCR1B, CS11);
+#if F_CPU == 8000000
+	// set timer 1 prescale factor to 1024
+	sbi(TCCR1B, CS12);
+	cbi(TCCR1B, CS11);
 	sbi(TCCR1B, CS10);
+#elif F_CPU == 1000000 || F_CPU == 2000000
+    //set timer 1 prescale factor to 256
+    sbi(TCCR1B, CS12);
+	cbi(TCCR1B, CS11);
+	cbi(TCCR1B, CS10);  
+#else
+    #warning "F_CPU value not supported. Buttons may not work"
+    // set timer 1 prescale factor to 64
+    cbi(TCCR1B, CS12);
+	sbi(TCCR1B, CS11);
+	sbi(TCCR1B, CS10); 
+#endif
+	sbi(TCCR1B, WGM12);  // Wave generation mode 4 -- CTC
+	cbi(TCCR1B, WGM13);
+	cbi(TCCR1A, WGM11);
+    cbi(TCCR1A, WGM10);
+    
+    sbi(TIMSK1, OCIE1A);
+    sbi(TCCR1A, COM1A1);
+    //TCCR1B = (1<<WGM13) | (1<<WGM12); 
+
 	// put timer 1 in 8-bit phase correct pwm mode
 	//sbi(TCCR1A, WGM10);
 
@@ -337,6 +358,7 @@ void init_timers(){
 #else
 	sbi(TCCR2A, WGM20);
 #endif
+    
 
 	// set a2d prescale factor to 128
 	// 16 MHz / 128 = 125 KHz, inside the desired 50-200 KHz range.
@@ -359,6 +381,9 @@ void init_timers(){
 	sbi(ADCSRA, ADPS0);
 #else
     #warning "F_CPU value not supported. Analog readings are not accurate"
+    sbi(ADCSRA, ADPS2); // default to 8Mhz
+	cbi(ADCSRA, ADPS1);
+	cbi(ADCSRA, ADPS0);
 #endif   
 	// enable a2d conversions
 	sbi(ADCSRA, ADEN);
@@ -371,8 +396,6 @@ void init_timers(){
 #else
 	UCSR0B = 0;
 #endif
+
     
-    sbi(TIMSK1, OCIE1A);
-    sbi(TCCR1A, WGM12);
-    sbi(TCCR1A, WGM13);
 }

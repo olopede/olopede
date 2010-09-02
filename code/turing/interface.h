@@ -2,8 +2,8 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 
-#ifndef __interface_h_include__
-#define __interface_h_include__
+#ifndef interface_h_include
+#define interface_h_include
 
 #define SET_DISP1       PORTB &= ~0x01; DDRB |= 0x01
 #define RST_DISP1       PORTB |= 0x01;  DDRB &= ~0x01
@@ -53,7 +53,9 @@ void _shift_byte(uint8_t);
 void shift_byte(uint8_t);
 void shift_data(uint8_t *v, uint8_t);
 
+extern uint8_t asdf;
 
+#define BTN_TIMER_CMP       250
 
 #define BTN_READ            0x01
 #define BTN_DEBOUNCE_TIME   30      // in ms
@@ -78,4 +80,4 @@ unsigned long millis(void);
 void delay_ms(unsigned long);
 void init_timers(void);
 
-#endif //__interface_h_include__
+#endif //interface_h_include
