@@ -50,43 +50,17 @@ void main(void){
     //turing.states = busybeaver;
     turing.states = copier;
     
-    btn_ctr_press = &_btn_ctr_press;
+    btn_ctr_hold = &_btn_ctr_press;
     btn_sl_hold = &_btn_sl_hold;
     btn_sr_hold = &_btn_sr_hold;
     btn_dl_hold = &_btn_dl_hold;
     btn_dr_hold = &_btn_dr_hold;
     
     for(i = 0;;i++){
-        //turing.disp_tape();
-        //turing.tape[1] = 'U';
-        //turing.tape[turing.tpos/8] ^= 1 << (turing.tpos % 8);
-        //shift_data(turing.tape, 3);
-        //delay_ms_poll(1);
-        //turing.tape[turing.tpos/8] ^= 1 << (turing.tpos % 8);
-        //shift_data(turing.tape, 3);
+
         
         disp_7seg_digit(turing.state >> 1);
         turing.disp_tape();
-
-        /*
-        if(btn_read() & BTN_CTR){
-            //TAPE_MV_UP;
-            turing.turing_step();
-        }
-        if(btn_read() & BTN_DL){
-            turing.tape_move_dn();
-        }
-        if(btn_read() & BTN_DR){
-            turing.tape_move_up();
-        }
-        if(btn_read() & BTN_DU){
-            turing.tape_flipsym();
-        }
-        if(btn_read() & BTN_SR){
-            turing.state = 0;
-        }
-        */
-        
-        delay_ms(20);        
+    
     }
 }

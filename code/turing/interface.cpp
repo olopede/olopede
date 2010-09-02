@@ -12,7 +12,7 @@ uint8_t btnState;
 //uint8_t btnDebounce;
 //unsigned long btnDebounceTimeout;
 
-static uint8_t seg_digits[11] = {0x7E, 0x0C, 0xB6, 0x00, 0x00, 0x00, 0x00, 0xFE, 0xFE, 0x00, 0xEC}; //PROGMEM?
+static uint8_t seg_digits[11] = {0x7E, 0x0C, 0xB6, 0x9E, 0xCC, 0xDA, 0xFA, 0x0E, 0xFE, 0xCE, 0xEC}; //PROGMEM?
 
 void (*btn_ctr_press)(void) = &do_nothing;
 void (*btn_sl_press)(void) = &do_nothing;
@@ -54,7 +54,7 @@ ISR(TIMER1_COMPA_vect){
 
 void disp_7seg(uint8_t v){
     // Display a figure, using...
-    /*    0bPgfedcba
+    /*    0bgfedcbaP
             --a--
            |     |
            f     b

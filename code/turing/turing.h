@@ -11,8 +11,8 @@
  * Tape interface
  */
 
-#define LIGHTBARS     3             // How many lightbars of 8 are visible
-#define TAPESIZE      40             // Total size of tape, not always visible.
+#define LIGHTBARS     4             // How many lightbars of 8 are visible
+#define TAPESIZE      80             // Total size of tape, not always visible.
 #define BTAPESIZE     (TAPESIZE/8)  // How large is the array to hold the tapesize
 #define TPOS_OFFSET   LIGHTBARS*4   // How far from the edge to display the "current" center 
 
