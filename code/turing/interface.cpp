@@ -11,7 +11,20 @@ uint8_t btnPress;
 uint8_t btnState;
 //uint8_t btnDebounce;
 //unsigned long btnDebounceTimeout;
+
 static uint8_t seg_digits[11] = {0x7E, 0x0C, 0xB6, 0x00, 0x00, 0x00, 0x00, 0xFE, 0xFE, 0x00, 0xEC}; //PROGMEM?
+
+void (*btn_ctr_press)(void) = &do_nothing;
+void (*btn_sl_press)(void) = &do_nothing;
+void (*btn_sr_press)(void) = &do_nothing;
+void (*btn_dl_press)(void) = &do_nothing;
+void (*btn_dr_press)(void) = &do_nothing;
+
+void (*btn_ctr_hold)(void) = &do_nothing;
+void (*btn_sl_hold)(void) = &do_nothing;
+void (*btn_sr_hold)(void) = &do_nothing;
+void (*btn_dl_hold)(void) = &do_nothing;
+void (*btn_dr_hold)(void) = &do_nothing;
 
 void interface_setup(){
 
@@ -168,29 +181,60 @@ void btn_poll(){
     DDRD |= SEG_D_MASK;
     #endif
     
-    //btnPress |= (_btnState ^ btnState) & btnState; // Only take rising edge
-    btnPress |= ~_btnState & btnState;               // Logically equivalent
-   
     // Enable 7 seg display output
     RST_BTNR;       
     SET_DISP1;
-}
-
-uint8_t btn_read_cached(){
-    // btnPress should have BTN_READ bit unset
-    btnPress |= BTN_READ;
-    //btnRead = btnPress;
-    #if BTN_READ == 0x01
-    return btnPress >> 1;
-    #else
-    #warning "BTN_READ bit is not yet supported. expect strange behavior from btnPress!"
-    return btnPress;
-    #endif
+    
+    //btnPress |= (_btnState ^ btnState) & btnState; // Only take rising edge
+    btnPress |= ~_btnState & btnState;               // Logically equivalent
+    
+    // Call event functions
+    if(btnState & BTN_CTR){
+        if(_btnState & BTN_CTR)
+            btn_ctr_hold();
+        else
+            btn_ctr_press();
+    }
+    if(btnState & BTN_SL){
+        if(_btnState & BTN_SL)
+            btn_sl_hold();
+        else
+            btn_sl_press();
+    }
+    if(btnState & BTN_SR){
+        if(_btnState & BTN_SR)
+            btn_sr_hold();
+        else
+            btn_sr_hold();
+    }
+    if(btnState & BTN_DR){
+        if(_btnState & BTN_DR)
+            btn_dr_hold();
+        else
+            btn_dl_press();
+    }
+    if(btnState & BTN_DL){
+        if(_btnState & BTN_DL)
+            btn_dl_hold();
+        else
+            btn_dl_press();
+    }
+    
+    
+    
+    
 }
 
 uint8_t btn_read(){
-    btn_poll();
-    return btn_read_cached();
+    // btnPress should have BTN_READ bit unset
+    btnPress |= BTN_READ;
+    //btnRead = btnPress;
+    return btnPress;
+}
+
+void do_nothing(){
+    // So exciting!
+    // Default button action
 }
 
 

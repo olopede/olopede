@@ -60,18 +60,37 @@ extern uint8_t asdf;
 #define BTN_READ            0x01
 #define BTN_DEBOUNCE_TIME   30      // in ms
 
-#define BTN_CTR             0x02
-#define BTN_SL              0x04
-#define BTN_SR              0x01
-#define BTN_DU              0x08
-#define BTN_DR              0x10
-#define BTN_DD              0x20
-#define BTN_DL              0x40
+#define BTN_CTR             0x04
+#define BTN_SL              0x08
+#define BTN_SR              0x02
+#define BTN_DU              0x10
+#define BTN_DR              0x20
+#define BTN_DD              0x40
+#define BTN_DL              0x80
 
 
 void btn_poll(void);
-uint8_t btn_read_cached(void);
 uint8_t btn_read(void);
+
+/* Button event functions */
+
+// Default (nothing)
+void do_nothing(void);
+
+// Presses
+extern void (*btn_ctr_press)(void);
+extern void (*btn_sl_press)(void);
+extern void (*btn_sr_press)(void);
+extern void (*btn_dl_press)(void);
+extern void (*btn_dr_press)(void);
+
+extern void (*btn_ctr_hold)(void);
+extern void (*btn_sl_hold)(void);
+extern void (*btn_sr_hold)(void);
+extern void (*btn_dl_hold)(void);
+extern void (*btn_dr_hold)(void);
+
+
 
 int pot_read(void);
 
