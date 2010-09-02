@@ -11,28 +11,49 @@ uint8_t btnPress;
 uint8_t btnState;
 //uint8_t btnDebounce;
 //unsigned long btnDebounceTimeout;
-static uint8_t seg_digits[11] = {0x7E, 0x0C, 0xB6, 0x00, 0x00, 0x00, 0x00, 0xFE, 0xFE, 0x00, 0xEC};
-uint8_t asdf;
+static uint8_t seg_digits[11] = {0x7E, 0x0C, 0xB6, 0x00, 0x00, 0x00, 0x00, 0xFE, 0xFE, 0x00, 0xEC}; //PROGMEM?
 
 void interface_setup(){
+
     init_timers();
     DDRD = 0x1C;
     OCR1A = 20;
+    
     //DDRC = 0xfe;
     //DDRB = 0xff;
+    
+    // For analog read
+    DDRC &= ~(1 << POT_PIN);
+    ADCSRA |= (1 << ADEN);
+	ADMUX = (1 << 6) | POT_PIN;
 }
 
 ISR(TIMER1_COMPA_vect){
     // Timer1 overflow -- poll buttons
+    // Disable interrupts while polling
+    // Some button events may take a while
+
+    cli();
     btn_poll();
-    //disp_7seg_digit(asdf++);
-    //asdf %= 10;
+    sei();
 }
 
 void disp_7seg(uint8_t v){
+    // Display a figure, using...
+    /*    0bPgfedcba
+            --a--
+           |     |
+           f     b
+           |--g--|
+           e     c
+           |     |
+            --d--  . P
+    */
     //C[1:5], D[6:7]
+    
+    // If buttons are enabled, turn them off & enable display
     RST_BTNR;
-    SET_DISP;
+    SET_DISP1;
     #if SEG_B_MASK != 0
     DDRB |= SEG_B_MASK;
     PORTB &= ~SEG_B_MASK;
@@ -89,47 +110,17 @@ void shift_data(uint8_t *v, uint8_t len){
     }
     SHIFT_STR_EN;
 }
-int read_pot(void){
-    DDRC &= ~(1 << POT_PIN);
-	uint8_t low, high;
-    ADCSRA |= (1 << ADEN);
-	// set the analog reference (high two bits of ADMUX) and select the
-	// channel (low 4 bits).  this also sets ADLAR (left-adjust result)
-	// to 0 (the default).
-	ADMUX = (1 << 6) | POT_PIN;
-
-	// without a delay, we seem to read from the wrong channel
-	//delay(1);
-
-	// start the conversion
-	ADCSRA |= 1 << ADSC;
-
-	// ADSC is cleared when the conversion finishes
-	while (ADCSRA & (1 << ADSC)) ;
-
-	// we have to read ADCL first; doing so locks both ADCL
-	// and ADCH until ADCH is read.  reading ADCL second would
-	// cause the results of each conversion to be discarded,
-	// as ADCL and ADCH would be locked when it completed.
-	low = ADCL;
-	high = ADCH;
-
-	// combine the two bytes
-	return (high << 8) | low;
-}
 
 void btn_poll(){
-    uint8_t _portb, _portc, _portd, _btnState; // Previous states
-
-    _portb = PORTB;
-    _portc = PORTC;
-    _portd = PORTD;
+    // Poll the button states
+    // Called from interrupt
     
     
-    RST_DISP;
+    // Disable 7 seg display in order to read btn states
+    RST_DISP1;
     SET_BTNR;
     
-    _btnState = btnState;
+    uint8_t _btnState = btnState;
     btnState = 0x00;
 
     if(btnPress & BTN_READ){
@@ -137,43 +128,51 @@ void btn_poll(){
     }
 
     #if SEG_B_MASK != 0
-    DDRB &= ~SEG_B_MASK;             // Set to input
+    uint8_t _portb = PORTB;         // Previous state (leave things as they are found)
+    DDRB &= ~SEG_B_MASK;            // Set to input
     PORTB |= SEG_B_MASK;            // Disable pullups
     #endif
     
     #if SEG_C_MASK != 0
+    uint8_t _portc = PORTC;
     DDRC &= ~SEG_C_MASK;
     PORTC |= SEG_C_MASK;
     #endif
     
     #if SEG_D_MASK != 0
+    uint8_t _portd = PORTD;
     DDRD &= ~SEG_D_MASK;
     PORTD |= SEG_D_MASK;
     #endif
     
-    
-    // Experiments show that 7 nops are nessassary to allow pullups to take effect at 16Mhz
-    // 10 for good measure, otherwise it'd suck.
+    // Experiments show that 7 nops are nessassary to allow pullups to take 
+    // effect at 16Mhz; 10 for good measure, otherwise it'd really screw up
     NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;   // 10 NOPs
     
-    
-    btnState |= (~PINB & SEG_B_MASK); // Read. Low bits are "active". 
-    btnState |= (~PINC & SEG_C_MASK);
-    btnState |= (~PIND & SEG_D_MASK);
-    btnPress |= (_btnState ^ btnState) & btnState; // Rising edge
-    
-    
-    // Reset everything to the way it was & output for 7 seg
-    PORTB = _portb;
-    PORTC = _portc;
-    PORTD = _portd;
-    
+    #if SEG_B_MASK != 0
+    btnState |= (~PINB & SEG_B_MASK);    // Read. Low bits are "active". 
+    PORTB = _portb;                      // Reset to previous state
     DDRB |= SEG_B_MASK;
+    #endif
+    
+    #if SEG_C_MASK != 0
+    btnState |= (~PINC & SEG_C_MASK);
+    PORTC = _portc;
     DDRC |= SEG_C_MASK;
+    #endif
+    
+    #if SEG_D_MASK != 0
+    btnState |= (~PIND & SEG_D_MASK);
+    PORTD = _portd;
     DDRD |= SEG_D_MASK;
-
-    RST_BTNR;
-    SET_DISP;
+    #endif
+    
+    //btnPress |= (_btnState ^ btnState) & btnState; // Only take rising edge
+    btnPress |= ~_btnState & btnState;               // Logically equivalent
+   
+    // Enable 7 seg display output
+    RST_BTNR;       
+    SET_DISP1;
 }
 
 uint8_t btn_read_cached(){
@@ -191,6 +190,40 @@ uint8_t btn_read_cached(){
 uint8_t btn_read(){
     btn_poll();
     return btn_read_cached();
+}
+
+
+int pot_read(void){
+    uint8_t low;
+
+    /* -- Moved to init; only called once
+    DDRC &= ~(1 << POT_PIN);
+	
+    ADCSRA |= (1 << ADEN);
+	// set the analog reference (high two bits of ADMUX) and select the
+	// channel (low 4 bits).  this also sets ADLAR (left-adjust result)
+	// to 0 (the default).
+	ADMUX = (1 << 6) | POT_PIN;
+    */
+
+	// without a delay, we seem to read from the wrong channel
+	//delay(1);
+
+	// start the conversion
+	ADCSRA |= 1 << ADSC;
+
+	// ADSC is cleared when the conversion finishes
+	while (ADCSRA & (1 << ADSC)) ;
+
+	// we have to read ADCL first; doing so locks both ADCL
+	// and ADCH until ADCH is read.  reading ADCL second would
+	// cause the results of each conversion to be discarded,
+	// as ADCL and ADCH would be locked when it completed.
+	low = ADCL;
+	//high = ADCH;
+
+	// combine the two bytes
+	return (ADCH << 8) | low;
 }
 
 
@@ -309,10 +342,24 @@ void init_timers(){
 	// 16 MHz / 128 = 125 KHz, inside the desired 50-200 KHz range.
 	// XXX: this will not work properly for other clock speeds, and
 	// this code should use F_CPU to determine the prescale factor.
-	sbi(ADCSRA, ADPS2);
+	// prescale factor = 2 ^ (SUM of ADPS values)
+	// 1 1 1 ==> 2 ^ 7 = 128
+	// 0 1 1 ==> 2 ^ 3 = 8
+#if F_CPU == 16000000
+	sbi(ADCSRA, ADPS2); // 4
+	sbi(ADCSRA, ADPS1); // 2
+	sbi(ADCSRA, ADPS0); // 1
+#elif F_CPU == 8000000
+    sbi(ADCSRA, ADPS2);
+	cbi(ADCSRA, ADPS1);
+	cbi(ADCSRA, ADPS0);
+#elif F_CPU == 1000000
+ 	cbi(ADCSRA, ADPS2);
 	sbi(ADCSRA, ADPS1);
 	sbi(ADCSRA, ADPS0);
-
+#else
+    #warning "F_CPU value not supported. Analog readings are not accurate"
+#endif   
 	// enable a2d conversions
 	sbi(ADCSRA, ADEN);
 

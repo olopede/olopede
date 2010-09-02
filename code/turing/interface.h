@@ -2,12 +2,11 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 
+#ifndef __interface_h_include__
+#define __interface_h_include__
 
-
-
-
-#define SET_DISP        PORTB &= ~0x01; DDRB |= 0x01
-#define RST_DISP        PORTB |= 0x01;  DDRB &= ~0x01
+#define SET_DISP1       PORTB &= ~0x01; DDRB |= 0x01
+#define RST_DISP1       PORTB |= 0x01;  DDRB &= ~0x01
 
 #define SET_BTNR        PORTB &= ~0x02; DDRB |= 0x02
 #define RST_BTNR        PORTB |= 0x02;  DDRB &= ~0x02
@@ -49,7 +48,6 @@
 void interface_setup(void);
 void disp_7seg(uint8_t);
 void disp_7seg_digit(uint8_t);
-int read_pot(void);
 
 void _shift_byte(uint8_t);
 void shift_byte(uint8_t);
@@ -73,10 +71,11 @@ void btn_poll(void);
 uint8_t btn_read_cached(void);
 uint8_t btn_read(void);
 
+int pot_read(void);
 
 /* Shamelessly stolen from the Arduino Wiring library */
 unsigned long millis(void);
 void delay_ms(unsigned long);
 void init_timers(void);
 
-
+#endif //__interface_h_include__
