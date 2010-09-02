@@ -36,13 +36,13 @@ void main(void){
         //delay_ms_poll(1);
         //turing.tape[turing.tpos/8] ^= 1 << (turing.tpos % 8);
         //shift_data(turing.tape, 3);
-        disp_7seg_digit(turing.state >> 1);
+        //disp_7seg_digit(turing.state >> 1);
         turing.tape_flipsym();
         turing.disp_tape();
-        delay_ms_poll(5);
+        delay_ms(5);
         turing.tape_flipsym();
         turing.disp_tape();
-        if(btn_read_cached() & BTN_CTR){
+        if(btn_read() & BTN_CTR){
             //TAPE_MV_UP;
             turing.turing_step();
         }
@@ -59,6 +59,6 @@ void main(void){
             turing.state = 0;
         }
         
-        delay_ms_poll(20);        
+        delay_ms(20);        
     }
 }

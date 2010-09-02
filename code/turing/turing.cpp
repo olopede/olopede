@@ -61,7 +61,7 @@ void Turing::disp_tape(){
     
         uint8_t pos = (i - TPOS_OFFSET + tpos + TAPESIZE) % TAPESIZE;
         
-        vtape[i/8] |= (!!(tape[pos/8] & (1 << (pos % 8)))) << (i % 8).;
+        vtape[i/8] |= (!!(tape[pos/8] & (1 << (pos % 8)))) << (i % 8);
         
         //pos++;
         //pos %= BTAPESIZE;

@@ -12,18 +12,21 @@ uint8_t btnState;
 //uint8_t btnDebounce;
 //unsigned long btnDebounceTimeout;
 static uint8_t seg_digits[11] = {0x7E, 0x0C, 0xB6, 0x00, 0x00, 0x00, 0x00, 0xFE, 0xFE, 0x00, 0xEC};
-
+uint8_t asdf;
 
 void interface_setup(){
     init_timers();
     DDRD = 0x1C;
+    OCR1A = 20;
     //DDRC = 0xfe;
     //DDRB = 0xff;
 }
 
-SIGNAL(TIMER1_OVF_vect){
+ISR(TIMER1_COMPA_vect){
     // Timer1 overflow -- poll buttons
     btn_poll();
+    //disp_7seg_digit(asdf++);
+    //asdf %= 10;
 }
 
 void disp_7seg(uint8_t v){
@@ -48,7 +51,7 @@ void disp_7seg(uint8_t v){
     PORTD |= SEG_D_MASK & v;
     #endif
     
-    #if SEG_DISP_T != 0
+    #if SEG_DISP_T > 0
     delay_ms_poll(SEG_DISP_T);
     #endif
 }
@@ -191,23 +194,6 @@ uint8_t btn_read(){
 }
 
 
-
-/* Use delay_ms_poll instead of _delay_ms
- * It executes "background" functions periodically
- *
- * Although interrupts could be used, the btnPoll code could cause problems
- * with the analog input & 7seg code, because they use the same pins
- */
-void delay_ms_poll(int t){
-    btn_poll();
-    for(;t > BTN_DEBOUNCE_TIME; t -= BTN_DEBOUNCE_TIME){ 
-        delay_ms(BTN_DEBOUNCE_TIME);
-        btn_poll();
-    }
-    delay_ms(t);
-    btn_poll();
-}
-
 /* Shamelessly stolen from the Arduino Wiring library */
 // the prescaler is set so that timer0 ticks every 64 clock cycles, and the
 // the overflow handler is called every 256 ticks.
@@ -304,7 +290,7 @@ void init_timers(){
 	sbi(TCCR1B, CS11);
 	sbi(TCCR1B, CS10);
 	// put timer 1 in 8-bit phase correct pwm mode
-	sbi(TCCR1A, WGM10);
+	//sbi(TCCR1A, WGM10);
 
 	// set timer 2 prescale factor to 64
 #if defined(__AVR_ATmega8__)
@@ -317,17 +303,6 @@ void init_timers(){
 	sbi(TCCR2, WGM20);
 #else
 	sbi(TCCR2A, WGM20);
-#endif
-
-#if defined(__AVR_ATmega1280__)
-	// set timer 3, 4, 5 prescale factor to 64
-	sbi(TCCR3B, CS31);	sbi(TCCR3B, CS30);
-	sbi(TCCR4B, CS41);	sbi(TCCR4B, CS40);
-	sbi(TCCR5B, CS51);	sbi(TCCR5B, CS50);
-	// put timer 3, 4, 5 in 8-bit phase correct pwm mode
-	sbi(TCCR3A, WGM30);
-	sbi(TCCR4A, WGM40);
-	sbi(TCCR5A, WGM50);
 #endif
 
 	// set a2d prescale factor to 128
@@ -349,4 +324,8 @@ void init_timers(){
 #else
 	UCSR0B = 0;
 #endif
+    
+    sbi(TIMSK1, OCIE1A);
+    sbi(TCCR1A, WGM12);
+    sbi(TCCR1A, WGM13);
 }

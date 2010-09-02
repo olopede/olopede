@@ -16,7 +16,7 @@
 #define SEG_C_MASK      0x3e //0b00111110
 #define SEG_D_MASK      0xc0 //0b11000000
 
-#define SEG_DISP_T      1
+#define SEG_DISP_T      0
 
 /*
  * -bar--->--avr
@@ -73,8 +73,6 @@ void btn_poll(void);
 uint8_t btn_read_cached(void);
 uint8_t btn_read(void);
 
-
-void delay_ms_poll(int);
 
 /* Shamelessly stolen from the Arduino Wiring library */
 unsigned long millis(void);
