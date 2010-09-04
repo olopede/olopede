@@ -1,0 +1,13 @@
+#{ oloduino Documentation [olopede]
+#{ By: Zach Banks <zach@olopede.com>
+#{ License: CC by-sa 3.0v
+#{ http://olopede.com/docs/oloduino
+#{ pre-proto2 v0.1 09/10
+#!markdown
+#{ oloduino
+#: oloduino
+Arduino clone that does so much more. Snaps apart into 3 functional sections:
+
+- Power stick with 5V voltage regulator & 3.3V output
+- USB dongle for serial communication & ICSP programming
+- Microcontroller section to be used cheaply in projects

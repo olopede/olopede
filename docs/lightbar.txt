@@ -1,0 +1,94 @@
+#{ Lightbar Documentation [olopede]
+#{ By: Zach Banks <zach@olopede.com>
+#{ License: CC by-sa 3.0v
+#{ http://olopede.com/docs/lightbar
+#{ pre-proto2 v0.1 09/10
+#!markdown
+#{ lightbar
+#: Lightbar
+Small little segment of 8 LEDs powered by a shift register.
+
+Used with turing
+
+#{ -- BOM Items -- }
+#~
+IC1,4094 DIP,Digikey,296-2069-5-ND
+R1,1k R (1/8W),Digikey,CF18JT1K00-ND
+R2 ``
+R3 ``
+R4 ``
+R5 ``
+R6 ``
+R7 ``
+R8 ``
+LED1,5mm LED,Digikey,754-1274-ND
+LED2 ``
+LED3 ``
+LED4 ``
+LED5 ``
+LED6 ``
+LED7 ``
+LED8 ``
+JP1,5pin M header rt,Digikey,609-2226-ND
+JP2,5pin F header rt,Digikey,S5480-ND
+PCB,PCB (1.5 sq in),AC,OLO-PCB-LBR1
+
+
+#{ -- Documentation -- }
+
+##      Gather Materials
+#% PCB
+#$ abv
+Gather together everything you need to build the lightbar module. Go over the Bill Of Materials to make sure everything in your kit was included.
+
+Make sure you have a soldering iron, solder, and flush cutters. Having a vice or a set of 3rd hands are helpful to hold the PCB.
+
+
+##      Solder Resistors
+#% R[1-8]
+#$ abv
+All of the resistors on the board are 1k ohms. They have the color code brown-black-red-gold. 
+
+Bend the leads to make a "staple" shape, then push them through the holes. It does not matter which way they go in, resistors aren't polarized.
+
+Because the holes are tight, you may need to pull the leads through with pliers. Be careful not to pull <em>too</em> hard and break the reistor!
+
+Then, flip the board over and solder each resistor in. Make sure to clip the leads afterwards.
+
+
+##      Solder Shift Register
+#% IC1
+#$ abv
+Locate the shift register chip. First, you have to bend the leads in slighty. Lay it flat against the table and press gently to straighten the leads.
+
+Afterwards, it should fit nicely into the holes on the board. Make sure you line up the notch on the top of chip with the cresent on the board.
+
+Then, solder the chip into the board. There are 16 pins to solder. Make sure you don't have any shorts!
+
+
+##      Solder Headers
+#% JP1,JP2
+#$ abv
+Now, to solder in the headers that allow you to chain the boards together. 
+
+Take the female pins, the ones that are the black shrouds, and insert them into JP2. Then, flip the board over to solder them in.
+
+Then, do the same for the male pins. These have the gold part sticking out on both ends. Place the angled part into the holes marked JP1, and then solder them in.
+
+
+##      Solder LEDs
+#% LED[1-8]
+#$ abv
+Now, the last soldering: the LEDs themselves. 
+
+Locate the positive end of the LED. This side is placed into the hole marked with a '+'. The negative side should go in the hole to the right.
+
+Then, before soldering, bend the LED over the side of the board flat. The LED can be soldered to the top pads on the board, then clipped.
+
+
+##      Testing
+#$ abv
+Plug the newly-minted lightbar into the turing machine. If assembled correctly, the LEDs will light up one-by-one in order.
+
+
+

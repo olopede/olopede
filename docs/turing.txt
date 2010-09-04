@@ -1,0 +1,9 @@
+#{ Turing Machine Documentation [olopede]
+#{ By: Zach Banks <zach@olopede.com>
+#{ License: CC by-sa 3.0v
+#{ http://olopede.com/docs/turing
+#{ pre-proto2 v0.1 09/10
+#!markdown
+#{ turing
+#: Turing Machine
+The turing machine lets you experiment with a rudimentary, yet universal, computer system.
